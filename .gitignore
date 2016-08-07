@@ -1,0 +1,9 @@
+# Python
+*.pyc
+
+# Ignore PDF files
+*.pdf
+
+# Mac, IDE
+.DS_Store
+.idea
