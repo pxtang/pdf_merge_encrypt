@@ -1,3 +1,8 @@
+# Code written by Peter Tang for SpringLight Education Institute, Inc.
+# Not for use or reproduction in any for without authorization
+# Copyright 2016, SpringLight Education Institute, Inc.
+
+
 import os, getpass
 import PyPDF2
 
@@ -8,8 +13,18 @@ output_path = 'output/'
 
 
 def main():
+    comp_type = get_type()
     passwords = get_passwords()
     make_pdfs(passwords)
+
+
+def get_type():
+    valid_types = ["open", "semi", "both"]
+    comp_type = ''
+    while comp_type not in valid_types:
+        comp_type = raw_input("Please enter the USABO type. Valid types are 'open', 'semi', 'both'.\n")
+
+    return comp_type
 
 
 def get_passwords():
@@ -27,17 +42,22 @@ def make_pdfs(passwords):
 
 def create_pdf(year, cp_statements, passwords):
     try:
-        with open(orig_path + 'USABO {:d} Open Exam.pdf'.format(year), 'rb') as usabo_f:
-            output_name = "USABO {:d} Open".format(year)
-            temp_fname = orig_path + output_name + temp + ext
-            
-            with open(temp_fname, "w+b") as output_pdf:
+        orig_file = 'USABO {:d} Open Exam.pdf'.format(year)
+
+        output_name = "USABO {:d} Open".format(year)
+        temp_fname = orig_path + output_name + temp + ext
+
+        with open(temp_fname, "w+b") as output_pdf:
+            with open(orig_path + orig_file, 'rb') as usabo_f:
                 merge_files(cp_statements, output_pdf, usabo_f)
 
-                output_name = encrypt_file(output_name, output_pdf, passwords)
+            output_name = encrypt_file(output_name, output_pdf, passwords)
+        os.remove(temp_fname)
 
-            os.remove(temp_fname)
+        try:
             print "Finished output for file `{:s}`".format(output_name)
+        except NameError:
+            print "Error when converting {:s}".format(orig_file)
 
     except IOError:
         print 'Unable to open {:d} pdf'.format(year)
