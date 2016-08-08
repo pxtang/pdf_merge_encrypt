@@ -8,8 +8,8 @@ import PyPDF2
 
 ext = ".pdf"
 temp = " Temp"
-orig_path = 'original/'
-output_path = 'output/'
+orig_path = './original/'
+output_path = './output/'
 
 
 def main():
